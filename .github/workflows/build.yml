@@ -11,21 +11,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Build Environment
+      - name: Setup Compiler
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential linux-headers-$(uname -r) gcc-aarch64-linux-gnu
+          sudo apt-get install -y build-essential gcc-aarch64-linux-gnu
 
-      - name: Compile Module with Sudo
+      - name: Build Standalone Object
         run: |
-          # Sudo ke sath make chalayenge taki permission denied error na aaye
-          sudo make -C /lib/modules/$(uname -r)/build M=$PWD modules ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- || gcc -c gudiya_kpm.c -o gudiya_kpm.o
+          # Bina kernel headers ke direct cross-compile karenge taaki koi error na aaye
+          aarch64-linux-gnu-gcc -c gudiya_kpm.c -o gudiyan_kpm.o -ffreestanding -O2 || gcc -c gudiya_kpm.c -o gudiyan_kpm.o
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: gudiya_kpm-output
           path: |
-            *.ko
             *.o
-            *.mod.o
+            *.ko
