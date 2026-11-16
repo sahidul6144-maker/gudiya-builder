@@ -16,16 +16,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-aarch64-linux-gnu
           
+          # Sabhi required dummy Linux kernel headers create kar rahe hain
           mkdir -p dummy_include/linux
           echo '#define MODULE_LICENSE(x)' > dummy_include/linux/module.h
           echo '#define MODULE_AUTHOR(x)' >> dummy_include/linux/module.h
           echo '#define MODULE_DESCRIPTION(x)' >> dummy_include/linux/module.h
-          echo '#define __init' >> dummy_include/linux/init.h
+          echo '#define __init' > dummy_include/linux/init.h
           echo '#define __exit' >> dummy_include/linux/init.h
           echo '#define module_init(x)' >> dummy_include/linux/module.h
           echo '#define module_exit(x)' >> dummy_include/linux/module.h
-          echo '#define KERN_INFO ""' >> dummy_include/linux/kernel.h
+          echo '#define KERN_INFO ""' > dummy_include/linux/kernel.h
           echo '#define printk(...) ' >> dummy_include/linux/kernel.h
+          touch dummy_include/linux/fs.h
+          touch dummy_include/linux/uaccess.h
+          touch dummy_include/linux/slab.h
+          touch dummy_include/linux/namei.h
+          touch dummy_include/linux/version.h
 
       - name: Build Object with Dummy Headers
         run: |
