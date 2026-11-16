@@ -16,10 +16,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential linux-headers-$(uname -r) gcc-aarch64-linux-gnu
 
-      - name: Compile Module
+      - name: Compile Module with Sudo
         run: |
-          # Linux headers ke sath standard module build command
-          make -C /lib/modules/$(uname -r)/build M=$(PWD) modules ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- || gcc -c gudiyan_test.c
+          # Sudo ke sath make chalayenge taki permission denied error na aaye
+          sudo make -C /lib/modules/$(uname -r)/build M=$PWD modules ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- || gcc -c gudiya_kpm.c -o gudiya_kpm.o
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
