@@ -16,15 +16,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-aarch64-linux-gnu
 
-      - name: Build Standalone Object
+      - name: Build Object
         run: |
-          # Bina kernel headers ke direct cross-compile karenge taaki koi error na aaye
-          aarch64-linux-gnu-gcc -c gudiya_kpm.c -o gudiyan_kpm.o -ffreestanding -O2 || gcc -c gudiya_kpm.c -o gudiyan_kpm.o
+          aarch64-linux-gnu-gcc -c gudiya_kpm.c -o gudiyakpm.o -O2
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: gudiya_kpm-output
-          path: |
-            *.o
-            *.ko
+          path: *.o
