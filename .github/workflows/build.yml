@@ -11,14 +11,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Compiler
+      - name: Setup Compiler & Headers
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-aarch64-linux-gnu
+          
+          # Dummy Linux kernel headers folder banayenge taaki header missing error khatam ho jaye
+          mkdir -p dummy_include/linux
+          echo '#define MODULE_LICENSE(x)' > dummy_include/linux/module.h
+          echo '#define MODULE_AUTHOR(x)' >> dummy_include/linux/module.h
+          echo '#define MODULE_DESCRIPTION(x)' >> dummy_include/linux/module.h
+          echo '#define __init' >> dummy_include/linux/init.h
+          echo '#define __exit' >> dummy_include/linux/init.h
+          echo '#define module_init(x)' >> dummy_include/linux/module.h
+          echo '#define module_exit(x)' >> dummy_include/linux/module.h
+          echo '#define KERN_INFO ""' >> dummy_include/linux/kernel.h
+          echo '#define printk(...) ' >> dummy_include/linux/kernel.h
 
-      - name: Build Object
+      - name: Build Object with Dummy Headers
         run: |
-          aarch64-linux-gnu-gcc -c gudiya_kpm.c -o gudiyakpm.o -O2
+          aarch64-linux-gnu-gcc -c gudiya_kpm.c -o gudiya_kpm.o -Idummy_include -O2
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
