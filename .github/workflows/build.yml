@@ -21,6 +21,7 @@ jobs:
           echo '#define MODULE_LICENSE(x)' > dummy_include/linux/module.h
           echo '#define MODULE_AUTHOR(x)' >> dummy_include/linux/module.h
           echo '#define MODULE_DESCRIPTION(x)' >> dummy_include/linux/module.h
+          echo '#define MODULE_VERSION(x)' >> dummy_include/linux/module.h
           echo '#define __init' > dummy_include/linux/init.h
           echo '#define __exit' >> dummy_include/linux/init.h
           echo '#define module_init(x)' >> dummy_include/linux/module.h
@@ -32,6 +33,7 @@ jobs:
           touch dummy_include/linux/slab.h
           touch dummy_include/linux/namei.h
           touch dummy_include/linux/version.h
+          touch dummy_include/linux/kallsyms.h
 
       - name: Build Object with Dummy Headers
         run: |
