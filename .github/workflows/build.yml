@@ -14,17 +14,18 @@ jobs:
       - name: Setup Build Environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-aarch64-linux-gnu
+          sudo apt-get install -y build-essential linux-headers-$(uname -r) gcc-aarch64-linux-gnu
 
-      - name: Compile Direct Object
+      - name: Compile Module
         run: |
-          # Kernel Makefile ko bypass karke direct ARM64 object compile karenge
-          aarch64-linux-gnu-gcc -c gudiya_kpm.c -o gudiyakpm.o -ffreestanding -nostdinc || gcc -c gudiya_kpm.c -o gudiyakpm.o
+          # Linux headers ke sath standard module build command
+          make -C /lib/modules/$(uname -r)/build M=$(PWD) modules ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- || gcc -c gudiyan_test.c
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: gudiya_kpm-output
           path: |
-            *.o
             *.ko
+            *.o
+            *.mod.o
