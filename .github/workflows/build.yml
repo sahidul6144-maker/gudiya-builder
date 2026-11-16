@@ -16,7 +16,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-aarch64-linux-gnu
           
-          # Dummy Linux kernel headers folder banayenge taaki header missing error khatam ho jaye
           mkdir -p dummy_include/linux
           echo '#define MODULE_LICENSE(x)' > dummy_include/linux/module.h
           echo '#define MODULE_AUTHOR(x)' >> dummy_include/linux/module.h
@@ -36,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gudiya_kpm-output
-          path: *.o
+          path: gudiya_kpm.o
